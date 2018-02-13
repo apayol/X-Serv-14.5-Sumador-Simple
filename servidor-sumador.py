@@ -19,16 +19,21 @@ try:
         print(relativa)
         _, op1, funcion, op2 = relativa.split('/')    #guardo cada término
 
-        op1 = float(op1)
-        op2 = float(op2)
-        resultado = calculadora.funciones[funcion](op1, op2)
-       
+        try:
+            op1 = float(op1)
+            op2 = float(op2)
+            resultado = calculadora.funciones[funcion](op1, op2)
+        except KeyError:
+            resultado = "FAIL! Funciones aceptadas: sumar, restar, multiplicar, dividir o exp"
+        except ValueError:
+            resultado = "FAIL! Los operandos han de ser numeros"
+        
         # Respuesta:
         print('Answering back...\n')
         html_respuesta = "<html><body><h2>Calculadora &uarr; </h2>"
-        html_respuesta += "<p><h3>El resultado es: "
+        html_respuesta += "<p><h4>El resultado es: "
         html_respuesta += str(resultado)
-        html_respuesta += "</h3></p></body></html>"
+        html_respuesta += "</h4></p></body></html>"
 
         recvSocket.send(bytes("HTTP/1.1 200 OK\r\n\r\n" + html_respuesta + "\r\n", 'utf-8'))
         recvSocket.close()
